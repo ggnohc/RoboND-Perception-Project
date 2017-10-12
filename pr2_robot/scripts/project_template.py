@@ -55,6 +55,21 @@ def pcl_callback(pcl_msg):
     pcl_data = ros_to_pcl(pcl_msg)
 
     # TODO: Statistical Outlier Filtering
+    # From Lesson 3-16 Outlier Removal Filter
+    # Much like the previous filters, we start by creating a filter object:
+    outlier_filter = pcl_data.make_statistical_outlier_filter()
+
+    # Set the number of neighboring points to analyze for any given point
+    outlier_filter.set_mean_k(50)
+
+    # Set threshold scale factor
+    x = 1.0
+
+    # Any point with a mean distance larger than global (mean distance+x*std_dev) will be considered outlier
+    outlier_filter.set_std_dev_mul_thresh(x)
+
+    # Finally call the filter function for magic
+    pcl_data = outlier_filter.filter()
 
     # TODO: Voxel Grid Downsampling
     # Voxel Grid filter
@@ -257,9 +272,12 @@ if __name__ == '__main__':
     rospy.init_node('clustering', anonymous=True)
 
     # TODO: Create Subscribers
+    # __init__(self, name, data_class, callback=None, callback_args=None, queue_size=None, buff_size=65536, tcp_nodelay=False)
     # pcl_sub = rospy.Subscriber("/sensor_stick/point_cloud", pc2.PointCloud2, pcl_callback, queue_size=1)
+    pcl_sub = rospy.Subscriber("/pr2/world/points", pc2.PointCloud2, pcl_callback, queue_size=1)
 
     # TODO: Create Publishers
+    # __init__(self, name, data_class, subscriber_listener=None, tcp_nodelay=False, latch=False, headers=None, queue_size=None)
     # pcl_objects_pub = rospy.Publisher("/pcl_objects", PointCloud2, queue_size=1)
     # pcl_table_pub = rospy.Publisher("/pcl_table", PointCloud2, queue_size=1)
     # pcl_cluster_pub = rospy.Publisher("/pcl_cluster", PointCloud2, queue_size=1)
