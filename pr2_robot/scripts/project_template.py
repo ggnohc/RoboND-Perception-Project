@@ -223,7 +223,7 @@ def pcl_callback(pcl_msg):
     # Could add some logic to determine whether or not your object detections are robust
     # before calling pr2_mover()
     try:
-        pr2_mover(detected_objects_list)
+        pr2_mover(detected_objects)
     except rospy.ROSInterruptException:
         pass
 
@@ -231,16 +231,33 @@ def pcl_callback(pcl_msg):
 def pr2_mover(object_list):
 
     # TODO: Initialize variables
+    labels = []
+    centroids = [] # list of tuples (x,y,z)
 
     # TODO: Get/Read parameters
+    object_list_param = rospy.get_param('/object_list')
 
     # TODO: Parse parameters into individual variables
+
 
     # TODO: Rotate PR2 in place to capture side tables for the collision map
 
     # TODO: Loop through the pick list
+    for obj in object_list_param:
 
         # TODO: Get the PointCloud for a given object and obtain it's centroid
+        object_name = String()
+        object_name.data = obj['name']
+        print("object_name.data:{}".format(object_name.data))
+
+        labels.append(object_name.data)
+        # Compare detected_objects (pass as 'object_list') and obj in object_list_param
+        # if match then calculate the centroid
+        for detected_obj in object_list:
+            if detected_obj.label == object_name.data:
+                points_arr = ros_to_pcl(detected_obj.cloud).to_array()
+                centroids.append(np.mean(points_arr, axis=0)[:3])
+                break
 
         # TODO: Create 'place_pose' for the object
 
