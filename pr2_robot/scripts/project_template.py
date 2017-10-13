@@ -194,7 +194,7 @@ def pcl_callback(pcl_msg):
         nhists = compute_normal_histograms(normals)
         feature = np.concatenate((chists, nhists))
         # labeled_features.append([feature, model_name])
-        detected_objects_labels.append([feature, index])
+        # detected_objects_labels.append([feature, index])  #GC do we need this line?
 
         # Compute the associated feature vector
 
@@ -278,18 +278,18 @@ if __name__ == '__main__':
 
     # TODO: Create Publishers
     # __init__(self, name, data_class, subscriber_listener=None, tcp_nodelay=False, latch=False, headers=None, queue_size=None)
-    # pcl_objects_pub = rospy.Publisher("/pcl_objects", PointCloud2, queue_size=1)
-    # pcl_table_pub = rospy.Publisher("/pcl_table", PointCloud2, queue_size=1)
-    # pcl_cluster_pub = rospy.Publisher("/pcl_cluster", PointCloud2, queue_size=1)
-    # object_markers_pub = rospy.Publisher("/object_markers", Marker, queue_size=1)
-    # detected_objects_pub = rospy.Publisher("/detected_objects", DetectedObjectsArray, queue_size=1)
+    pcl_objects_pub = rospy.Publisher("/pcl_objects", PointCloud2, queue_size=1)
+    pcl_table_pub = rospy.Publisher("/pcl_table", PointCloud2, queue_size=1)
+    pcl_cluster_pub = rospy.Publisher("/pcl_cluster", PointCloud2, queue_size=1)
+    object_markers_pub = rospy.Publisher("/object_markers", Marker, queue_size=1)
+    detected_objects_pub = rospy.Publisher("/detected_objects", DetectedObjectsArray, queue_size=1)
 
     # TODO: Load Model From disk
-    # model = pickle.load(open('model.sav', 'rb'))
-    # clf = model['classifier']
-    # encoder = LabelEncoder()
-    # encoder.classes_ = model['classes']
-    # scaler = model['scaler']
+    model = pickle.load(open('model.sav', 'rb'))
+    clf = model['classifier']
+    encoder = LabelEncoder()
+    encoder.classes_ = model['classes']
+    scaler = model['scaler']
 
     # Initialize color_list
     get_color_list.color_list = []
