@@ -234,11 +234,39 @@ def pr2_mover(object_list):
     labels = []
     centroids = [] # list of tuples (x,y,z)
 
+    #list of msg variables sending to pr2_pick_place_server
+    test_scene_num = Int32()
+    object_name = String()
+    arm_name = String()
+    pick_pose = Pose()
+    place_pose = Pose()
+
+    #rosmsg info geometry_msgs/Pose
+        # geometry_msgs/Point position
+        #   float64 x
+        #   float64 y
+        #   float64 z
+        # geometry_msgs/Quaternion orientation
+        #   float64 x
+        #   float64 y
+        #   float64 z
+        #   float64 w
+    #Based on definition of Pose() rosmsg defined above, initiatize the pick_pose
+    #and place_pose variables
+    pick_pose.position.x = 0
+    pick_pose.position.y = 0
+    pick_pose.position.z = 0
+
+    place_pose.position.x = 0
+    place_pose.position.y = 0
+    place_pose.position.z = 0
+
     # TODO: Get/Read parameters
     object_list_param = rospy.get_param('/object_list')
+    dropbox_param = rospy.get_param('/dropbox')
 
     # TODO: Parse parameters into individual variables
-
+    # This step is done through for loop later on
 
     # TODO: Rotate PR2 in place to capture side tables for the collision map
 
@@ -246,7 +274,6 @@ def pr2_mover(object_list):
     for obj in object_list_param:
 
         # TODO: Get the PointCloud for a given object and obtain it's centroid
-        object_name = String()
         object_name.data = obj['name']
         print("object_name.data:{}".format(object_name.data))
 
@@ -257,11 +284,31 @@ def pr2_mover(object_list):
             if detected_obj.label == object_name.data:
                 points_arr = ros_to_pcl(detected_obj.cloud).to_array()
                 centroids.append(np.mean(points_arr, axis=0)[:3])
+                print("centroids: {}".format(centroids))
+                # recast to native Python float type as expected by ROS message
+                pick_pose.position.x = np.asscalar(centroids[0])
+                pick_pose.position.y = np.asscalar(centroids[1])
+                pick_pose.position.z = np.asscalar(centroids[2])
                 break
 
-        # TODO: Create 'place_pose' for the object
-
         # TODO: Assign the arm to be used for pick_place
+        # definte arm_name based on group
+        if (obj['group']) == "red":
+            arm_name.data = "left"
+        elif (obj['group']) == "green":
+            arm_name.data = "right":
+        else:
+            print("ERROR: group must be 'red' or 'green'!!!")
+
+        # TODO: Create 'place_pose' for the object based on group defined
+        # loop through dropbox_param and set the place_pose when matches with arm_name
+        # discovered
+        for db in dropbox_param:
+            if arm_name.data == db['name']:
+                place_pose.position.x = db['position'][0]
+                place_pose.position.y = db['position'][1]
+                place_pose.position.z = db['position'][2]
+                break
 
         # TODO: Create a list of dictionaries (made with make_yaml_dict()) for later output to yaml format
 
