@@ -60,10 +60,10 @@ def pcl_callback(pcl_msg):
     outlier_filter = pcl_data.make_statistical_outlier_filter()
 
     # Set the number of neighboring points to analyze for any given point
-    outlier_filter.set_mean_k(50)
+    outlier_filter.set_mean_k(20)
 
     # Set threshold scale factor
-    x = 1.0
+    x = 0.3
 
     # Any point with a mean distance larger than global (mean distance+x*std_dev) will be considered outlier
     outlier_filter.set_std_dev_mul_thresh(x)
@@ -141,7 +141,7 @@ def pcl_callback(pcl_msg):
     # as well as minimum and maximum cluster size (in points)
     ec.set_ClusterTolerance(0.015)
     ec.set_MinClusterSize(20)
-    ec.set_MaxClusterSize(1500)
+    ec.set_MaxClusterSize(3000)
     # Search the k-d tree for clusters
     ec.set_SearchMethod(tree)
     # Extract indices for each of the discovered clusters
