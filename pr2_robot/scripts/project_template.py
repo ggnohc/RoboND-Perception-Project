@@ -284,12 +284,12 @@ def pr2_mover(object_list):
         for detected_obj in object_list:
             if detected_obj.label == object_name.data:  #if detected object match item in pick list
                 points_arr = ros_to_pcl(detected_obj.cloud).to_array()
-                centroids.append(np.mean(points_arr, axis=0)[:3])
-                print("centroids: {}".format(centroids))
+                centroid_np = np.mean(points_arr, axis=0)[:3]
+                print("centroid_np: {}".format(centroid_np))
                 # recast to native Python float type as expected by ROS message
-                pick_pose.position.x = np.asscalar(centroids[0])
-                pick_pose.position.y = np.asscalar(centroids[1])
-                pick_pose.position.z = np.asscalar(centroids[2])
+                pick_pose.position.x = np.asscalar(centroid_np[0])
+                pick_pose.position.y = np.asscalar(centroid_np[1])
+                pick_pose.position.z = np.asscalar(centroid_np[2])
                 break
 
         # TODO: Assign the arm to be used for pick_place
@@ -297,7 +297,7 @@ def pr2_mover(object_list):
         if (obj['group']) == "red":
             arm_name.data = "left"
         elif (obj['group']) == "green":
-            arm_name.data = "right":
+            arm_name.data = "right"
         else:
             print("ERROR: group must be 'red' or 'green'!!!")
 
@@ -325,7 +325,8 @@ def pr2_mover(object_list):
             pick_place_routine = rospy.ServiceProxy('pick_place_routine', PickPlace)
 
             # TODO: Insert your message variables to be sent as a service request
-            resp = pick_place_routine(TEST_SCENE_NUM, OBJECT_NAME, WHICH_ARM, PICK_POSE, PLACE_POSE)
+            # resp = pick_place_routine(TEST_SCENE_NUM, OBJECT_NAME, WHICH_ARM, PICK_POSE, PLACE_POSE)
+            resp = pick_place_routine(test_scene_num, object_name, arm_name, pick_pose, place_pose)
 
             print ("Response: ",resp.success)
 
