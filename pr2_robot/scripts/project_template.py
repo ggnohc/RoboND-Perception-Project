@@ -233,6 +233,7 @@ def pr2_mover(object_list):
     # TODO: Initialize variables
     labels = []
     centroids = [] # list of tuples (x,y,z)
+    yaml_dict_list = [] # dictionary to store yaml_dict
 
     #list of msg variables sending to pr2_pick_place_server
     test_scene_num = Int32()
@@ -281,7 +282,7 @@ def pr2_mover(object_list):
         # Compare detected_objects (pass as 'object_list') and obj in object_list_param
         # if match then calculate the centroid
         for detected_obj in object_list:
-            if detected_obj.label == object_name.data:
+            if detected_obj.label == object_name.data:  #if detected object match item in pick list
                 points_arr = ros_to_pcl(detected_obj.cloud).to_array()
                 centroids.append(np.mean(points_arr, axis=0)[:3])
                 print("centroids: {}".format(centroids))
@@ -311,6 +312,11 @@ def pr2_mover(object_list):
                 break
 
         # TODO: Create a list of dictionaries (made with make_yaml_dict()) for later output to yaml format
+        test_scene_num.data = 1
+
+        # Populate various ROS messages
+        yaml_dict = make_yaml_dict(test_scene_num, arm_name, object_name, pick_pose, place_pose)
+        yaml_dict_list.append(yaml_dict)
 
         # Wait for 'pick_place_routine' service to come up
         rospy.wait_for_service('pick_place_routine')
@@ -327,7 +333,8 @@ def pr2_mover(object_list):
             print "Service call failed: %s"%e
 
     # TODO: Output your request parameters into output yaml file
-
+    output_yaml_file = "output_" + str(test_scene_num.data) + ".yaml"
+    send_to_yaml(output_yaml_file, yaml_dict_list)
 
 
 if __name__ == '__main__':
