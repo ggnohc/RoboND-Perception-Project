@@ -324,7 +324,7 @@ def pr2_mover(object_list):
         try:
             pick_place_routine = rospy.ServiceProxy('pick_place_routine', PickPlace)
 
-            # TODO: Insert your message variables to be sent as a service request
+            #TODO: Insert your message variables to be sent as a service request
             #resp = pick_place_routine(test_scene_num, object_name, arm_name, pick_pose, place_pose)
 
             #print ("Response: ",resp.success)
