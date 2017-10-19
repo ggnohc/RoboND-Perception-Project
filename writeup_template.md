@@ -38,27 +38,31 @@ You're reading it!
 ### Exercise 1, 2 and 3 pipeline implemented
 #### 1. Complete Exercise 1 steps. Pipeline for filtering and RANSAC plane fitting implemented.
 
+
+
 #### 2. Complete Exercise 2 steps: Pipeline including clustering for segmentation implemented.  
+For clustering, Euclidean Clustering or DBSCAN algorithm is used in favor of K-means clustering, as we have no idea how many clusters to expect in the data, while K-means algorithm expects number of cluster as input.
 
-#### 2. Complete Exercise 3 Steps.  Features extracted and SVM trained.  Object recognition implemented.
-Here is an example of how to include an image in your writeup.
 
-![demo-1](https://user-images.githubusercontent.com/20687560/28748231-46b5b912-7467-11e7-8778-3095172b7b19.png)
+DBSCAN stands for Density-Based Spatial Clustering of Applications with Noise. This algorithm is a nice alternative to k-means when you don' t know how many clusters to expect in your data, but you do know something about how the points should be clustered in terms of density (distance between points in a cluster).
+
+
+#### 3. Complete Exercise 3 Steps.  Features extracted and SVM trained.  Object recognition implemented.
+*88%* accuracy achieved after change to using *HSV* (compute_color_histograms, using_hsv=True), increase loop to *25*, and use *RBF* kernel
+
+<img src="./images/Exercise_3_improve_model.png"/>
 
 ### Pick and Place Setup
 
 #### 1. For all three tabletop setups (`test*.world`), perform object recognition, then read in respective pick list (`pick_list_*.yaml`). Next construct the messages that would comprise a valid `PickPlace` request output them to `.yaml` format.
 
 
-<img src="./images/test_scene_1_gazebo.png" width="400" height="400" />
-<img src="./images/test_scene_1_rviz.png" width="800" height="400" />
-<img src="./images/test_scene_2_gazebo.png" width="400" height="400" />
-<img src="./images/test_scene_2_rviz.png" width="800" height="400" />
-<img src="./images/test_scene_3_gazebo.png" width="400" height="400" />
-<img src="./images/test_scene_3_rviz.png" width="800" height="400" />
-
-
-
+<img src="./images/test_scene_1_gazebo.png"/>
+<img src="./images/test_scene_1_rviz.png"/>
+<img src="./images/test_scene_2_gazebo.png" width="800" height="800" />
+<img src="./images/test_scene_2_rviz.png"/>
+<img src="./images/test_scene_3_gazebo.png"/>
+<img src="./images/test_scene_3_rviz.png"/>
 
 
 Spend some time at the end to discuss your code, what techniques you used, what worked and why, where the implementation might fail and how you might improve it if you were going to pursue this project further.  
