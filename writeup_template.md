@@ -38,6 +38,17 @@ You're reading it!
 ### Exercise 1, 2 and 3 pipeline implemented
 #### 1. Complete Exercise 1 steps. Pipeline for filtering and RANSAC plane fitting implemented.
 
+  * In order to improve computation time, the full resolution point cloud was downsampled. By setting the leaf size/voxel size (in meters) to 0.01 which was determined to be the optimal value, the following image was obtained:
+
+  <img src="./images/voxel_downsample_001.png"/>
+
+  * The downsampled voxel was then went through a passthrough filter to only retain useful information, by focusing on *region of interest*. Applying filter over the z-axis (which is height of table) , and setting the minimum and maximum axis to 0.6 and 1.1 respectively, we obtained the following:
+
+  <img src="./images/passthrough_filter.png"/>
+
+  *
+
+
 
 
 #### 2. Complete Exercise 2 steps: Pipeline including clustering for segmentation implemented.  
