@@ -137,6 +137,8 @@ Spend some time at the end to discuss your code, what techniques you used, what 
 4. pick_pose
 5. place_pose
 
+* "Outlier Removal Filter" was added as noise was introduced for the project.
+
 * Using "rosmsg info", the attribute of the ROS messages above are discovered and populated with expected values.
   * For example "Pose" ROS message has position and orientation attribute as below:
 
