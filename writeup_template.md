@@ -113,7 +113,7 @@ By capturing feature with initial setting which was without HSV, 5 times feature
 
   <img src="./images/Project_feature_capture.png"/>
 
-* By loading different test scene thourhg modification of "/pr2_robot/launch/pick_place_project.launch" and executing "project_template.py", all the objects for test scene 1 to 3 was 100% captured:
+* By loading different test scene through modification of "/pr2_robot/launch/pick_place_project.launch" and executing "project_template.py", all the objects for test scene 1 to 3 was 100% captured:
 
   * Test Scene 1 with 3 out of 3 object identified.
   <img src="./images/test_scene_1_gazebo.png"/>
