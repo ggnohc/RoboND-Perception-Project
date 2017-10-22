@@ -40,22 +40,40 @@ You're reading it!
 
   * In order to improve computation time, the full resolution point cloud was downsampled. By setting the leaf size/voxel size (in meters) to 0.01 which was determined to be the optimal value, the following image was obtained:
 
-  <img src="./images/voxel_downsample_001.png"/>
+    <img src="./images/voxel_downsample_001.png"/>
 
-  * The downsampled voxel was then went through a passthrough filter to only retain useful information, by focusing on *region of interest*. Applying filter over the z-axis (which is height of table) , and setting the minimum and maximum axis to 0.6 and 1.1 respectively, we obtained the following:
+  * The downsampled voxel was then went through a passthrough filter to only retain useful information, by focusing on a particular *region of interest*. Applying filter over the z-axis (which is height of table) , and setting the minimum and maximum axis to 0.6 and 1.1 respectively, we obtained the following:
 
-  <img src="./images/passthrough_filter.png"/>
+    <img src="./images/passthrough_filter.png"/>
 
-  *
+  * Next step is to remove the table from the scene so that only objects on the table are shown! This is done by using a technique called *Random Sample Consensus* or "RANSAC".
+    * By utilizing point cloud library's SACMODEL_PLANE (http://docs.pointclouds.org/1.7.0/group__sample__consensus.html), to determine plane models, the table is treated as "inliers", and hence the objects on the tables can extracted as "outliers".
+    * Setting max_distance to 0.01 yield the following point cloud which shows the table only:
+
+      <img src="./images/extracted_inlier.png"/>
+
+    * Figure below shows point cloud with objects on table only.
+
+      <img src="./images/extracted_outlier.png"/>
 
 
 
 
 #### 2. Complete Exercise 2 steps: Pipeline including clustering for segmentation implemented.  
-For clustering, Euclidean Clustering or DBSCAN algorithm is used in favor of K-means clustering, as we have no idea how many clusters to expect in the data, while K-means algorithm expects number of cluster as input.
+For clustering, Euclidean Clustering or DBSCAN (Density-Based Spatial Clustering of Applications with Noise) algorithm is used in favor of K-means clustering (which expects number of cluster as input), as we have no idea how many clusters to expect in the data but know something about how the points should be clustered in terms of density (distance between points in a cluster).
+
+By setting cluster tolerance, min cluster size and max cluster size to *0.015*, *20* and *1500* respectively through trial and error, following image is presented:
+
+<img src="./images/cluster_visualization.png"/>
+
+From slack discussion:
+
+* 'tolerance' is how close adjacent points have to be to be considered as part of same cluster.  By setting the tolerance to a large number, two adjacent objects may get counted as one cluster, while setting it too small then points that should belong to a certain object's cluster may not get added to that cluster.
+
+* Max cluster size is the most number of spots in a cluster, which gets multiplied with the leaf size to produce the cluster object in one direction.
 
 
-DBSCAN stands for Density-Based Spatial Clustering of Applications with Noise. This algorithm is a nice alternative to k-means when you don' t know how many clusters to expect in your data, but you do know something about how the points should be clustered in terms of density (distance between points in a cluster).
+
 
 
 #### 3. Complete Exercise 3 Steps.  Features extracted and SVM trained.  Object recognition implemented.
@@ -70,7 +88,8 @@ DBSCAN stands for Density-Based Spatial Clustering of Applications with Noise. T
 
 <img src="./images/test_scene_1_gazebo.png"/>
 <img src="./images/test_scene_1_rviz.png"/>
-<img src="./images/test_scene_2_gazebo.png" width="800" height="800" />
+<!-- <img src="./images/test_scene_2_gazebo.png" width="800" height="800" /> -->
+<img src="./images/test_scene_2_gazebo.png"/>
 <img src="./images/test_scene_2_rviz.png"/>
 <img src="./images/test_scene_3_gazebo.png"/>
 <img src="./images/test_scene_3_rviz.png"/>
