@@ -77,6 +77,39 @@ From slack discussion:
 
 
 #### 3. Complete Exercise 3 Steps.  Features extracted and SVM trained.  Object recognition implemented.
+
+By setting the appropriate *GAZEBO_MODEL_PATH* (in this case "~/catkin_ws/src/sensor_stick/models"), we can run feature capturing for models defined in the folder:
+
+```
+robond@udacity:~/catkin_ws/src/sensor_stick/models$ ls
+arm_part  beer  biscuits  book  bowl  create  disk_part  eraser  glue  hammer  plastic_cup  snacks  soap  soap2  soda_can  sticky_notes
+```
+
+We then run feature capature on models defined in "capture_features.py" for models below:
+
+```
+models = [\
+    'beer',
+    'bowl',
+    'create',
+    'disk_part',
+    'hammer',
+    'plastic_cup',
+    'soda_can']
+```
+
+<img src="./images/capture_feature_soda.png" width="200" height="200" />
+<img src="./images/capture_feature_bowl.png" width="200" height="200"/>
+<img src="./images/capture_feature_irobot.png" width="200" height="200"/>
+<img src="./images/capture_feature_disk_part.png" width="200" height="200"/>
+<img src="./images/capture_feature_hammer.png" width="200" height="200"/>
+
+
+
+
+Exercise_3_before_improve
+<img src="./images/Exercise_3_before_improve.png"/>
+
 *88%* accuracy achieved after change to using *HSV* (compute_color_histograms, using_hsv=True), increase loop to *25*, and use *RBF* kernel
 
 <img src="./images/Exercise_3_improve_model.png"/>
@@ -88,7 +121,6 @@ From slack discussion:
 
 <img src="./images/test_scene_1_gazebo.png"/>
 <img src="./images/test_scene_1_rviz.png"/>
-<!-- <img src="./images/test_scene_2_gazebo.png" width="800" height="800" /> -->
 <img src="./images/test_scene_2_gazebo.png"/>
 <img src="./images/test_scene_2_rviz.png"/>
 <img src="./images/test_scene_3_gazebo.png"/>
@@ -96,3 +128,18 @@ From slack discussion:
 
 
 Spend some time at the end to discuss your code, what techniques you used, what worked and why, where the implementation might fail and how you might improve it if you were going to pursue this project further.  
+
+* By importing most of the code implemented from Exercise 1, 2 and 3, we only need to update the "pr2_mover()" routine which we are required to output the *.yaml file* with the following parameters:
+1. test_scene_num
+2. arm_name
+3. object_name
+4. pick_pose
+5. place_pose
+
+
+* The following code are commented to prevent pick and place action from robot, as \*.yaml file will be modified after robot do a successful pickup for certain case.
+
+``` python
+#TODO: Insert your message variables to be sent as a service request
+resp = pick_place_routine(test_scene_num, object_name, arm_name, pick_pose, place_pose)
+```
