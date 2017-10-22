@@ -60,7 +60,7 @@ You're reading it!
 
 
 #### 2. Complete Exercise 2 steps: Pipeline including clustering for segmentation implemented.  
-For clustering, Euclidean Clustering or DBSCAN (Density-Based Spatial Clustering of Applications with Noise) algorithm is used in favor of K-means clustering, which expects number of cluster as input,, as we had no idea how many clusters to expect in the data but know something about how the points should be clustered in terms of density (distance between points in a cluster).
+For clustering, Euclidean Clustering or DBSCAN (Density-Based Spatial Clustering of Applications with Noise) algorithm is used in favor of K-means clustering, which expects number of cluster as input, as we had no idea how many clusters to expect in the data but know something about how the points should be clustered in terms of density (distance between points in a cluster).
 
 From slack discussion:
 
@@ -139,7 +139,9 @@ Spend some time at the end to discuss your code, what techniques you used, what 
 
 * "Outlier Removal Filter" was added as noise was introduced for the project.
 
-* Using "rosmsg info", the attribute of the ROS messages above are discovered and populated with expected values.
+* Also need to subscribe to camera data point cloud "/pr2/world/points"
+
+* Using "rosmsg info", the attribute of the ROS messages above were discovered and populated with expected values.
   * For example "Pose" ROS message has position and orientation attribute as below:
 
     ```
