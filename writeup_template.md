@@ -38,17 +38,17 @@ You're reading it!
 ### Exercise 1, 2 and 3 pipeline implemented
 #### 1. Complete Exercise 1 steps. Pipeline for filtering and RANSAC plane fitting implemented.
 
-  * In order to improve computation time, the full resolution point cloud was downsampled. By setting the leaf size/voxel size (in meters) to 0.01 which was determined to be the optimal value, the following image was obtained:
+  * In order to improve computation time, the full resolution point cloud was down sampled. By setting the leaf size/voxel size (in meters) to 0.01 which was determined to be the optimal value, the following image was produced:
 
     <img src="./images/voxel_downsample_001.png"/>
 
-  * The downsampled voxel was then went through a passthrough filter to only retain useful information, by focusing on a particular *region of interest*. Applying filter over the z-axis (which is height of table) , and setting the minimum and maximum axis to 0.6 and 1.1 respectively, we obtained the following:
+  * The down sampled voxel was then went through a passthrough filter to only retain useful information, by focusing on a particular *region of interest*. Applying filter over the z-axis (which is height of table) , and setting the minimum and maximum axis to 0.6 and 1.1 respectively, we obtained the following:
 
     <img src="./images/passthrough_filter.png"/>
 
   * Next step is to remove the table from the scene so that only objects on the table are shown! This is done by using a technique called *Random Sample Consensus* or "RANSAC".
-    * By utilizing point cloud library's SACMODEL_PLANE (http://docs.pointclouds.org/1.7.0/group__sample__consensus.html), to determine plane models, the table is treated as "inliers", and hence the objects on the tables can extracted as "outliers".
-    * Setting max_distance to 0.01 yield the following point cloud which shows the table only:
+    * By utilizing point cloud library's SACMODEL_PLANE (http://docs.pointclouds.org/1.7.0/group__sample__consensus.html), to determine plane models, the table was treated as "inliers", and hence the objects on the tables can be extracted as "outliers".
+    * Setting max_distance to 0.01 yield the following point cloud which showed the table only:
 
       <img src="./images/extracted_inlier.png"/>
 
@@ -60,11 +60,7 @@ You're reading it!
 
 
 #### 2. Complete Exercise 2 steps: Pipeline including clustering for segmentation implemented.  
-For clustering, Euclidean Clustering or DBSCAN (Density-Based Spatial Clustering of Applications with Noise) algorithm is used in favor of K-means clustering (which expects number of cluster as input), as we have no idea how many clusters to expect in the data but know something about how the points should be clustered in terms of density (distance between points in a cluster).
-
-By setting cluster tolerance, min cluster size and max cluster size to *0.015*, *20* and *1500* respectively through trial and error, following image is presented:
-
-<img src="./images/cluster_visualization.png"/>
+For clustering, Euclidean Clustering or DBSCAN (Density-Based Spatial Clustering of Applications with Noise) algorithm is used in favor of K-means clustering, which expects number of cluster as input,, as we had no idea how many clusters to expect in the data but know something about how the points should be clustered in terms of density (distance between points in a cluster).
 
 From slack discussion:
 
@@ -72,9 +68,9 @@ From slack discussion:
 
 * Max cluster size is the most number of spots in a cluster, which gets multiplied with the leaf size to produce the cluster object in one direction.
 
+By setting cluster tolerance, min cluster size and max cluster size to *0.015*, *20* and *1500* respectively through trial and error, following image was produced:
 
-
-
+<img src="./images/cluster_visualization.png"/>
 
 #### 3. Complete Exercise 3 Steps.  Features extracted and SVM trained.  Object recognition implemented.
 
@@ -102,10 +98,10 @@ models = [\
 <img src="./images/capture_feature_hammer.png" width="200" height="200"/> <img src="./images/capture_feature_disk_part.png" width="200" height="200"/>
 
 
-Exercise_3_before_improve
+By capturing feature with initial setting which was without HSV, 5 times feature capture per object, and using linear kernel, an accuracy of 66% is obtaind, which is pretty low.
 <img src="./images/Exercise_3_before_improve.png"/>
 
-*88%* accuracy achieved after change to using *HSV* (compute_color_histograms, using_hsv=True), increase loop to *25*, and use *RBF* kernel
+*94%* accuracy was achieved after change to using *HSV*, increased feature capture to *50*, and using *RBF* kernel.
 
 <img src="./images/Exercise_3_improve_model.png"/>
 
@@ -113,13 +109,23 @@ Exercise_3_before_improve
 
 #### 1. For all three tabletop setups (`test*.world`), perform object recognition, then read in respective pick list (`pick_list_*.yaml`). Next construct the messages that would comprise a valid `PickPlace` request output them to `.yaml` format.
 
+* New training data "model.sav" was generated by repeating capture feature steps for models defined in "pick_list_*.yaml", an accuracy rate of 97% was achieved based on confusion matrix generated as below:
 
-<img src="./images/test_scene_1_gazebo.png"/>
-<img src="./images/test_scene_1_rviz.png"/>
-<img src="./images/test_scene_2_gazebo.png"/>
-<img src="./images/test_scene_2_rviz.png"/>
-<img src="./images/test_scene_3_gazebo.png"/>
-<img src="./images/test_scene_3_rviz.png"/>
+  <img src="./images/Project_feature_capture.png"/>
+
+* By loading different test scene thourhg modification of "/pr2_robot/launch/pick_place_project.launch" and executing "project_template.py", all the objects for test scene 1 to 3 was 100% captured:
+
+  * Test Scene 1 with 3 out of 3 object identified.
+  <img src="./images/test_scene_1_gazebo.png"/>
+  <img src="./images/test_scene_1_rviz.png"/>
+
+  * Test Scene 2 with 5 out of 5 object identified.
+  <img src="./images/test_scene_2_gazebo.png"/>
+  <img src="./images/test_scene_2_rviz.png"/>
+
+  * Test Scene 3 with 8 out of 8 object identified.
+  <img src="./images/test_scene_3_gazebo.png"/>
+  <img src="./images/test_scene_3_rviz.png"/>
 
 
 Spend some time at the end to discuss your code, what techniques you used, what worked and why, where the implementation might fail and how you might improve it if you were going to pursue this project further.  
@@ -131,6 +137,21 @@ Spend some time at the end to discuss your code, what techniques you used, what 
 4. pick_pose
 5. place_pose
 
+* Using "rosmsg info", the attribute of the ROS messages above are discovered and populated with expected values.
+  * For example "Pose" ROS message has position and orientation attribute as below:
+
+    ```
+    robond@udacity:~/catkin_ws/src/sensor_stick/scripts$ rosmsg info geometry_msgs/Pose
+    geometry_msgs/Point position
+      float64 x
+      float64 y
+      float64 z
+    geometry_msgs/Quaternion orientation
+      float64 x
+      float64 y
+      float64 z
+      float64 w
+    ```
 
 * The following code are commented to prevent pick and place action from robot, as \*.yaml file will be modified after robot do a successful pickup for certain case.
 
@@ -138,3 +159,5 @@ Spend some time at the end to discuss your code, what techniques you used, what 
 #TODO: Insert your message variables to be sent as a service request
 resp = pick_place_routine(test_scene_num, object_name, arm_name, pick_pose, place_pose)
 ```
+
+* Given more time, I would like to complete the challenges portion for object pick and place.  Also would like to try out multiple classifier other than linear and RBF kernel.
