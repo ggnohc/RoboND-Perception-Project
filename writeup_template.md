@@ -98,13 +98,8 @@ models = [\
     'soda_can']
 ```
 
-<img src="./images/capture_feature_soda.png" width="200" height="200" />
-<img src="./images/capture_feature_bowl.png" width="200" height="200"/>
-<img src="./images/capture_feature_irobot.png" width="200" height="200"/>
-<img src="./images/capture_feature_disk_part.png" width="200" height="200"/>
-<img src="./images/capture_feature_hammer.png" width="200" height="200"/>
-
-
+<img src="./images/capture_feature_soda.png" width="200" height="200" /> <img src="./images/capture_feature_bowl.png" width="200" height="200"/>
+<img src="./images/capture_feature_hammer.png" width="200" height="200"/> <img src="./images/capture_feature_disk_part.png" width="200" height="200"/>
 
 
 Exercise_3_before_improve
